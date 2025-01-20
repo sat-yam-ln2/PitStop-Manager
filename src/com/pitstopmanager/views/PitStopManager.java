@@ -1,0 +1,1823 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package com.pitstopmanager.views;
+
+import com.pitstopmanager.model.DriverModel;
+import com.pitstopmanager.util.ValidationUtil;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Arrays;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import com.pitstopmanager.controllers.algorithms.SelectionSortByDriverID;
+import com.pitstopmanager.controllers.algorithms.InsertionSortByDriverName;
+import com.pitstopmanager.controllers.algorithms.MergeSortByTransferPrice;
+import com.pitstopmanager.controllers.algorithms.BinarySearchByName;
+/**
+ *
+ * @author satyam
+ */
+public class PitStopManager extends javax.swing.JFrame {
+    
+    private List<DriverModel> driverList;
+    private java.awt.CardLayout cardLayout;
+    private final ValidationUtil validationUtil;
+    //private java.awt.CardLayout cardLayout;
+    
+    /**
+     * Creates new form PitStopManager
+     */
+    public PitStopManager() {
+        validationUtil = new ValidationUtil();
+        initComponents();
+        initializeData();
+        initializeLayout();
+    }
+    
+    /**
+     * Initializes the layout of the application by setting up the CardLayout
+     * and adding panels for different screens. Each panel is uniquely
+     * identified for easy navigation between screens.
+     */
+    private void initializeLayout() {
+        cardLayout = new java.awt.CardLayout();
+        getContentPane().setLayout(cardLayout);
+
+        // Add panels with unique identifiers
+        getContentPane().add(pnlLoadingScreen, "LoadingScreen");
+        getContentPane().add(pnlLoginScreen, "LoginScreen");
+        getContentPane().add(pnlMainScreen, "MainScreen");
+
+        //Start with the loading screen
+        loadScreen("LoadingScreen");
+    }
+    
+    /**
+     * Initializes the application's data, including the driver list.
+     * Populates the driver list with sample data for demonstration purposes.
+     */
+    private void initializeData() {
+        driverList = new LinkedList<>();
+
+        // Registering sample drivers
+        registerDriver(new DriverModel(1, "Lewis Hamilton", 38, 17, "Mercedes", 103, 3, 50.0));
+        registerDriver(new DriverModel(2, "Max Verstappen", 26, 9, "Red Bull Racing", 54, 5, 80.0));
+        registerDriver(new DriverModel(3, "Charles Leclerc", 26, 6, "Ferrari", 5, 3, 60.0));
+        registerDriver(new DriverModel(4, "Fernando Alonso", 42, 19, "Aston Martin", 32, 2, 70.0)); 
+        registerDriver(new DriverModel(5, "Sergio Perez", 33, 9, "Red Bull Racing", 32, 2, 75.0));
+        registerDriver(new DriverModel(6, "Carlos Sainz", 29, 7, "Ferrari", 25, 2, 65.0));
+    }
+    
+    
+    /**
+     * Method to add driver data and populate the table
+     */  
+    private void registerDriver(DriverModel driver) {
+        driverList.add(driver); // Add the driver to the list
+        DefaultTableModel model = (DefaultTableModel) tblDriver.getModel();
+        model.addRow(new Object[]{
+            driver.getDriverId(), driver.getName(), driver.getAge(), 
+            driver.getExperience(), driver.getTeam(), driver.getWins(), 
+            driver.getContractDuration(), driver.getTransferFee()
+        });
+    }
+
+    
+    /**
+     * Simulates the loading progress using a SwingWorker thread. Updates a
+     * progress bar incrementally and switches to the login screen upon
+     * completion.
+     */
+    private void startProgress() {
+        javax.swing.SwingWorker<Void, Integer> worker = new javax.swing.SwingWorker<>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                for (int i = 0; i <= 100; i++) {
+                    Thread.sleep(30); // Simulated delay for progress bar
+                    publish(i); // Publish progress
+                }
+                return null;
+            }
+
+            @Override
+            protected void process(java.util.List<Integer> chunks) {
+                int progress = chunks.get(chunks.size() - 1);
+                pgBarSplashScreen.setValue(progress);
+                lblProgress.setText(Integer.toString(progress)+"%");
+            }
+
+            @Override
+            protected void done() {
+                loadScreen("LoginScreen"); // Switch to login screen
+            }
+        };
+        worker.execute(); // Start the worker thread
+    }
+    
+    /**
+     * Switches the application screen to the specified screen name.
+     *
+     * @param screenName The name of the screen to display.
+     */
+    private void loadScreen(String screenName) {
+        cardLayout.show(getContentPane(), screenName);
+    }
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        pnlLoginScreen = new javax.swing.JPanel();
+        lblLoginRight = new javax.swing.JLabel();
+        lblLoginTitle = new javax.swing.JLabel();
+        lblLoginSubTitle = new javax.swing.JLabel();
+        txtFldLoginUsername = new javax.swing.JTextField();
+        pwdFldLogin = new javax.swing.JPasswordField();
+        lblLoginForgotPwd = new javax.swing.JLabel();
+        btnLogin = new javax.swing.JButton();
+        lblLoginError = new javax.swing.JLabel();
+        lblUsername = new javax.swing.JLabel();
+        lblPassword = new javax.swing.JLabel();
+        pnlMainScreen = new javax.swing.JPanel();
+        pnlMainBar = new javax.swing.JPanel();
+        lblMainBarLogo = new javax.swing.JLabel();
+        btnLogout = new javax.swing.JButton();
+        tbMain = new javax.swing.JTabbedPane();
+        pnlHome = new javax.swing.JPanel();
+        btnHomeView = new javax.swing.JButton();
+        btnHomeAddUpdate = new javax.swing.JButton();
+        lblHomeHeading = new javax.swing.JLabel();
+        lblHomeStatement1 = new javax.swing.JLabel();
+        lblHomeStatement2 = new javax.swing.JLabel();
+        lblHomeStatement3 = new javax.swing.JLabel();
+        lblHomeSubTitle = new javax.swing.JLabel();
+        lblHomeStatement4 = new javax.swing.JLabel();
+        lblHomeStatement5 = new javax.swing.JLabel();
+        pnlView = new javax.swing.JPanel();
+        spnltable = new javax.swing.JScrollPane();
+        tblDriver = new javax.swing.JTable();
+        btnBackHome = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        jtxtFDeleteId = new javax.swing.JTextField();
+        lblDeleteDriver = new javax.swing.JLabel();
+        btnSortID = new javax.swing.JButton();
+        btnSortName = new javax.swing.JButton();
+        btnSortPrice = new javax.swing.JButton();
+        jtxtFSearch = new javax.swing.JTextField();
+        btnCancelSearch = new javax.swing.JButton();
+        btnSearch = new javax.swing.JButton();
+        lblTitle = new javax.swing.JLabel();
+        lblF1icon = new javax.swing.JLabel();
+        lblFNameSearch = new javax.swing.JLabel();
+        pnlAddUpdate = new javax.swing.JPanel();
+        lblName = new javax.swing.JLabel();
+        txtFName = new javax.swing.JTextField();
+        lblAge = new javax.swing.JLabel();
+        JSpinAge = new javax.swing.JSpinner();
+        lblId = new javax.swing.JLabel();
+        txtFId = new javax.swing.JTextField();
+        lblExperience = new javax.swing.JLabel();
+        jSpinExperience = new javax.swing.JSpinner();
+        lblTeam = new javax.swing.JLabel();
+        txtFTeam = new javax.swing.JTextField();
+        lblWins = new javax.swing.JLabel();
+        lblDuration = new javax.swing.JLabel();
+        lblTransferFee = new javax.swing.JLabel();
+        jSpinTransferFee = new javax.swing.JSpinner();
+        jSpinWins = new javax.swing.JSpinner();
+        jSpinDuration = new javax.swing.JSpinner();
+        btnAdd = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
+        lblAddPageTitle = new javax.swing.JLabel();
+        pnlAboutUs = new javax.swing.JPanel();
+        lblAboutUsTitle = new javax.swing.JLabel();
+        jSPanOurStory = new javax.swing.JScrollPane();
+        txtFDescription = new javax.swing.JTextArea();
+        lblContactUS = new javax.swing.JLabel();
+        lblEmail = new javax.swing.JLabel();
+        txtFUserEmail = new javax.swing.JTextField();
+        btnContact = new javax.swing.JButton();
+        lblAboutUsBg = new javax.swing.JLabel();
+        pnlLoadingScreen = new javax.swing.JPanel();
+        lblLoadingLogo = new javax.swing.JLabel();
+        pgBarSplashScreen = new javax.swing.JProgressBar();
+        lblLoading = new javax.swing.JLabel();
+        lblProgress = new javax.swing.JLabel();
+
+        pnlLoginScreen.setBackground(new java.awt.Color(255, 255, 255));
+        pnlLoginScreen.setPreferredSize(new java.awt.Dimension(800, 600));
+
+        lblLoginRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pitstopmanager/resources/rightSide.png"))); // NOI18N
+        lblLoginRight.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pitstopmanager/resources/rightSide.png"))); // NOI18N
+        lblLoginRight.setDoubleBuffered(true);
+
+        lblLoginTitle.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblLoginTitle.setText("Sign In to PitStop Manager");
+
+        lblLoginSubTitle.setText("Please enter your details for logging into yout account");
+
+        txtFldLoginUsername.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtFldLoginUsername.setText("admin");
+        txtFldLoginUsername.setToolTipText("");
+        txtFldLoginUsername.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFldLoginUsernameActionPerformed(evt);
+            }
+        });
+
+        pwdFldLogin.setText("admin");
+        pwdFldLogin.setToolTipText("");
+        pwdFldLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pwdFldLoginActionPerformed(evt);
+            }
+        });
+
+        lblLoginForgotPwd.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblLoginForgotPwd.setText("Forgot Password?");
+
+        btnLogin.setBackground(new java.awt.Color(255, 204, 204));
+        btnLogin.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
+
+        lblLoginError.setForeground(new java.awt.Color(255, 0, 0));
+        lblLoginError.setText("    ");
+        lblLoginError.setToolTipText("");
+
+        lblUsername.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblUsername.setText("Username");
+
+        lblPassword.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblPassword.setText("Password");
+
+        javax.swing.GroupLayout pnlLoginScreenLayout = new javax.swing.GroupLayout(pnlLoginScreen);
+        pnlLoginScreen.setLayout(pnlLoginScreenLayout);
+        pnlLoginScreenLayout.setHorizontalGroup(
+            pnlLoginScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginScreenLayout.createSequentialGroup()
+                .addGroup(pnlLoginScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlLoginScreenLayout.createSequentialGroup()
+                        .addGap(56, 56, 56)
+                        .addComponent(lblLoginError)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginScreenLayout.createSequentialGroup()
+                        .addGap(0, 35, Short.MAX_VALUE)
+                        .addGroup(pnlLoginScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblUsername)
+                            .addGroup(pnlLoginScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblLoginSubTitle)
+                                    .addComponent(lblLoginTitle))
+                                .addComponent(txtFldLoginUsername, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(pwdFldLogin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblPassword)))
+                    .addGroup(pnlLoginScreenLayout.createSequentialGroup()
+                        .addGroup(pnlLoginScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlLoginScreenLayout.createSequentialGroup()
+                                .addGap(108, 108, 108)
+                                .addComponent(lblLoginForgotPwd))
+                            .addGroup(pnlLoginScreenLayout.createSequentialGroup()
+                                .addGap(119, 119, 119)
+                                .addComponent(btnLogin)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(lblLoginRight, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        pnlLoginScreenLayout.setVerticalGroup(
+            pnlLoginScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginScreenLayout.createSequentialGroup()
+                .addComponent(lblLoginRight)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginScreenLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblLoginTitle)
+                .addGap(18, 18, 18)
+                .addComponent(lblLoginSubTitle)
+                .addGap(20, 20, 20)
+                .addComponent(lblUsername)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtFldLoginUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21)
+                .addComponent(lblPassword)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pwdFldLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblLoginError)
+                .addGap(10, 10, 10)
+                .addComponent(lblLoginForgotPwd)
+                .addGap(27, 27, 27)
+                .addComponent(btnLogin)
+                .addGap(123, 123, 123))
+        );
+
+        pnlMainScreen.setPreferredSize(new java.awt.Dimension(800, 600));
+
+        pnlMainBar.setBackground(new java.awt.Color(255, 255, 255));
+        pnlMainBar.setVerifyInputWhenFocusTarget(false);
+
+        lblMainBarLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pitstopmanager/resources/mainBarLogo.png"))); // NOI18N
+
+        btnLogout.setBackground(new java.awt.Color(0, 0, 0));
+        btnLogout.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogout.setText("LOG OUT");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlMainBarLayout = new javax.swing.GroupLayout(pnlMainBar);
+        pnlMainBar.setLayout(pnlMainBarLayout);
+        pnlMainBarLayout.setHorizontalGroup(
+            pnlMainBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMainBarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblMainBarLogo)
+                .addGap(269, 269, 269)
+                .addComponent(btnLogout)
+                .addContainerGap(364, Short.MAX_VALUE))
+        );
+        pnlMainBarLayout.setVerticalGroup(
+            pnlMainBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMainBarLayout.createSequentialGroup()
+                .addGroup(pnlMainBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlMainBarLayout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(lblMainBarLogo))
+                    .addGroup(pnlMainBarLayout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addComponent(btnLogout)))
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+
+        tbMain.setBackground(new java.awt.Color(255, 255, 255));
+        tbMain.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+
+        pnlHome.setBackground(new java.awt.Color(255, 255, 255));
+
+        btnHomeView.setBackground(new java.awt.Color(255, 153, 153));
+        btnHomeView.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnHomeView.setForeground(new java.awt.Color(255, 255, 255));
+        btnHomeView.setText("VIEW DRIVERS");
+        btnHomeView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHomeViewActionPerformed(evt);
+            }
+        });
+
+        btnHomeAddUpdate.setBackground(new java.awt.Color(255, 153, 153));
+        btnHomeAddUpdate.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnHomeAddUpdate.setForeground(new java.awt.Color(255, 255, 255));
+        btnHomeAddUpdate.setText("ADD/UPDATE DRIVERS");
+        btnHomeAddUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHomeAddUpdateActionPerformed(evt);
+            }
+        });
+
+        lblHomeHeading.setFont(new java.awt.Font("Consolas", 1, 36)); // NOI18N
+        lblHomeHeading.setForeground(new java.awt.Color(255, 153, 153));
+        lblHomeHeading.setText("WELCOME TO PITSTOP MANAGER !!!");
+
+        lblHomeStatement1.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
+        lblHomeStatement1.setText("Start exploring now and stay ahead on the grid.");
+
+        lblHomeStatement2.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        lblHomeStatement2.setText("View Market Prices");
+
+        lblHomeStatement3.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        lblHomeStatement3.setText("Analyze Key Matrices");
+
+        lblHomeSubTitle.setFont(new java.awt.Font("Baskerville Old Face", 0, 18)); // NOI18N
+        lblHomeSubTitle.setText("DIVE INTO THE WORLD OF FORMULA 1 LIKE NEVER BEFORE");
+
+        lblHomeStatement4.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        lblHomeStatement4.setText("Search for Drivers");
+
+        lblHomeStatement5.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        lblHomeStatement5.setText("Track Transfers");
+
+        javax.swing.GroupLayout pnlHomeLayout = new javax.swing.GroupLayout(pnlHome);
+        pnlHome.setLayout(pnlHomeLayout);
+        pnlHomeLayout.setHorizontalGroup(
+            pnlHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlHomeLayout.createSequentialGroup()
+                .addGroup(pnlHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlHomeLayout.createSequentialGroup()
+                        .addGap(113, 113, 113)
+                        .addComponent(btnHomeAddUpdate)
+                        .addGap(218, 218, 218)
+                        .addComponent(btnHomeView, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlHomeLayout.createSequentialGroup()
+                        .addGap(112, 112, 112)
+                        .addComponent(lblHomeHeading))
+                    .addGroup(pnlHomeLayout.createSequentialGroup()
+                        .addGap(122, 122, 122)
+                        .addComponent(lblHomeSubTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlHomeLayout.createSequentialGroup()
+                        .addGap(283, 283, 283)
+                        .addComponent(lblHomeStatement4))
+                    .addGroup(pnlHomeLayout.createSequentialGroup()
+                        .addGap(263, 263, 263)
+                        .addComponent(lblHomeStatement3))
+                    .addGroup(pnlHomeLayout.createSequentialGroup()
+                        .addGap(275, 275, 275)
+                        .addGroup(pnlHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblHomeStatement2)
+                            .addGroup(pnlHomeLayout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(lblHomeStatement5))))
+                    .addGroup(pnlHomeLayout.createSequentialGroup()
+                        .addGap(171, 171, 171)
+                        .addComponent(lblHomeStatement1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(661, 661, 661))
+        );
+        pnlHomeLayout.setVerticalGroup(
+            pnlHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlHomeLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(lblHomeHeading, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblHomeSubTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblHomeStatement4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblHomeStatement3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblHomeStatement2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblHomeStatement5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblHomeStatement1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addGroup(pnlHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnHomeAddUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHomeView, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(183, 183, 183))
+        );
+
+        tbMain.addTab("Home", pnlHome);
+
+        pnlView.setBackground(new java.awt.Color(255, 255, 255));
+
+        spnltable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        spnltable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                spnltableMouseClicked(evt);
+            }
+        });
+
+        tblDriver.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Driver ID", "Name ", "Age", "Experience (yrs.)", "Team", "Wins", "Contract Duration", "Transfer Fee (mils)"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblDriver.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tblDriver.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDriverMouseClicked(evt);
+            }
+        });
+        spnltable.setViewportView(tblDriver);
+        if (tblDriver.getColumnModel().getColumnCount() > 0) {
+            tblDriver.getColumnModel().getColumn(0).setPreferredWidth(30);
+            tblDriver.getColumnModel().getColumn(2).setPreferredWidth(10);
+            tblDriver.getColumnModel().getColumn(5).setPreferredWidth(10);
+        }
+
+        btnBackHome.setBackground(new java.awt.Color(0, 0, 0));
+        btnBackHome.setFont(new java.awt.Font("NSimSun", 0, 14)); // NOI18N
+        btnBackHome.setForeground(new java.awt.Color(255, 255, 255));
+        btnBackHome.setText("BACK");
+        btnBackHome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackHomeActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(0, 0, 0));
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("DELETE");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        jtxtFDeleteId.setBackground(new java.awt.Color(255, 204, 204));
+        jtxtFDeleteId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtxtFDeleteIdActionPerformed(evt);
+            }
+        });
+
+        lblDeleteDriver.setBackground(new java.awt.Color(0, 0, 0));
+        lblDeleteDriver.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblDeleteDriver.setText("Enter the Driver ID to delete");
+
+        btnSortID.setBackground(new java.awt.Color(255, 102, 102));
+        btnSortID.setForeground(new java.awt.Color(255, 255, 255));
+        btnSortID.setText("Sort by ID");
+        btnSortID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSortIDActionPerformed(evt);
+            }
+        });
+
+        btnSortName.setBackground(new java.awt.Color(255, 102, 102));
+        btnSortName.setForeground(new java.awt.Color(255, 255, 255));
+        btnSortName.setText("Sort by Name");
+        btnSortName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSortNameActionPerformed(evt);
+            }
+        });
+
+        btnSortPrice.setBackground(new java.awt.Color(255, 102, 102));
+        btnSortPrice.setForeground(new java.awt.Color(255, 255, 255));
+        btnSortPrice.setText("Sort by Price");
+        btnSortPrice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSortPriceActionPerformed(evt);
+            }
+        });
+
+        jtxtFSearch.setBackground(new java.awt.Color(255, 204, 204));
+        jtxtFSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtxtFSearchActionPerformed(evt);
+            }
+        });
+
+        btnCancelSearch.setForeground(new java.awt.Color(255, 51, 51));
+        btnCancelSearch.setText("X");
+        btnCancelSearch.setToolTipText("");
+        btnCancelSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelSearchActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setBackground(new java.awt.Color(255, 102, 102));
+        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
+        btnSearch.setText("Search");
+        btnSearch.setToolTipText("");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        lblTitle.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblTitle.setText("Drivers on the Grid ");
+
+        lblF1icon.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
+        lblF1icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pitstopmanager/resources/f1_mini_logo.png"))); // NOI18N
+        lblF1icon.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        lblFNameSearch.setText("Full Name :");
+
+        javax.swing.GroupLayout pnlViewLayout = new javax.swing.GroupLayout(pnlView);
+        pnlView.setLayout(pnlViewLayout);
+        pnlViewLayout.setHorizontalGroup(
+            pnlViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(spnltable)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlViewLayout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addComponent(btnBackHome)
+                .addGap(27, 27, 27)
+                .addComponent(btnSortID)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnSortName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnSortPrice)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblDeleteDriver)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jtxtFDeleteId, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnDelete)
+                .addGap(53, 53, 53))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlViewLayout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblF1icon)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblFNameSearch)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jtxtFSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCancelSearch)
+                .addGap(18, 18, 18)
+                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44))
+        );
+        pnlViewLayout.setVerticalGroup(
+            pnlViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlViewLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pnlViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblF1icon, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblTitle, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jtxtFSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCancelSearch)
+                        .addComponent(btnSearch)
+                        .addComponent(lblFNameSearch)))
+                .addGap(18, 18, 18)
+                .addComponent(spnltable, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(pnlViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDelete)
+                    .addComponent(btnBackHome)
+                    .addComponent(jtxtFDeleteId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSortID)
+                    .addComponent(btnSortName)
+                    .addComponent(lblDeleteDriver)
+                    .addComponent(btnSortPrice))
+                .addGap(184, 184, 184))
+        );
+
+        tbMain.addTab("View", pnlView);
+
+        pnlAddUpdate.setBackground(new java.awt.Color(255, 255, 255));
+        pnlAddUpdate.setPreferredSize(new java.awt.Dimension(800, 600));
+        pnlAddUpdate.setVerifyInputWhenFocusTarget(false);
+
+        lblName.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblName.setText("Driver Name ");
+
+        txtFName.setBackground(new java.awt.Color(255, 204, 204));
+        txtFName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFNameActionPerformed(evt);
+            }
+        });
+
+        lblAge.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblAge.setText("Age");
+
+        JSpinAge.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        JSpinAge.setName(""); // NOI18N
+
+        lblId.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblId.setText("Driver ID");
+
+        txtFId.setBackground(new java.awt.Color(255, 204, 204));
+        txtFId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFIdActionPerformed(evt);
+            }
+        });
+
+        lblExperience.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblExperience.setText("Experience in (Years)");
+
+        jSpinExperience.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jSpinExperience.setName(""); // NOI18N
+
+        lblTeam.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblTeam.setText("Team");
+
+        txtFTeam.setBackground(new java.awt.Color(255, 204, 204));
+        txtFTeam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFTeamActionPerformed(evt);
+            }
+        });
+
+        lblWins.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblWins.setText("Total number of Wins");
+
+        lblDuration.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblDuration.setText("Contract Duration (in Years)");
+
+        lblTransferFee.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblTransferFee.setText("Transfer Fee (in mils)");
+
+        jSpinTransferFee.setAutoscrolls(true);
+        jSpinTransferFee.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jSpinTransferFee.setName(""); // NOI18N
+        jSpinTransferFee.setOpaque(true);
+
+        jSpinWins.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jSpinWins.setName(""); // NOI18N
+
+        jSpinDuration.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jSpinDuration.setName(""); // NOI18N
+
+        btnAdd.setBackground(new java.awt.Color(0, 0, 0));
+        btnAdd.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdd.setText("ADD");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setBackground(new java.awt.Color(0, 0, 0));
+        btnUpdate.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdate.setText("UPDATE");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnClear.setBackground(new java.awt.Color(255, 102, 102));
+        btnClear.setForeground(new java.awt.Color(255, 255, 255));
+        btnClear.setText("Clear");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+
+        lblAddPageTitle.setBackground(new java.awt.Color(255, 102, 51));
+        lblAddPageTitle.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
+        lblAddPageTitle.setText("Fill in the fields with verified and valid information !!!");
+
+        javax.swing.GroupLayout pnlAddUpdateLayout = new javax.swing.GroupLayout(pnlAddUpdate);
+        pnlAddUpdate.setLayout(pnlAddUpdateLayout);
+        pnlAddUpdateLayout.setHorizontalGroup(
+            pnlAddUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAddUpdateLayout.createSequentialGroup()
+                .addGroup(pnlAddUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlAddUpdateLayout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addGroup(pnlAddUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAddUpdateLayout.createSequentialGroup()
+                                .addComponent(lblExperience)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                                .addComponent(jSpinExperience, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAddUpdateLayout.createSequentialGroup()
+                                .addComponent(lblAge)
+                                .addGap(62, 62, 62)
+                                .addComponent(JSpinAge))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAddUpdateLayout.createSequentialGroup()
+                                .addComponent(lblName)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtFName))
+                            .addGroup(pnlAddUpdateLayout.createSequentialGroup()
+                                .addComponent(lblId)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtFId, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlAddUpdateLayout.createSequentialGroup()
+                                .addComponent(lblTeam)
+                                .addGap(54, 54, 54)
+                                .addComponent(txtFTeam)))
+                        .addGap(67, 67, 67)
+                        .addGroup(pnlAddUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlAddUpdateLayout.createSequentialGroup()
+                                .addComponent(lblTransferFee)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jSpinTransferFee, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlAddUpdateLayout.createSequentialGroup()
+                                .addComponent(lblDuration)
+                                .addGap(27, 27, 27)
+                                .addComponent(jSpinDuration, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE))
+                            .addGroup(pnlAddUpdateLayout.createSequentialGroup()
+                                .addComponent(lblWins)
+                                .addGap(59, 59, 59)
+                                .addComponent(jSpinWins))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAddUpdateLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnClear))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAddUpdateLayout.createSequentialGroup()
+                                .addComponent(btnAdd)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnUpdate))))
+                    .addGroup(pnlAddUpdateLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblAddPageTitle)
+                        .addGap(147, 147, 147)))
+                .addGap(140, 140, 140))
+        );
+        pnlAddUpdateLayout.setVerticalGroup(
+            pnlAddUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAddUpdateLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(lblAddPageTitle)
+                .addGap(27, 27, 27)
+                .addGroup(pnlAddUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblId)
+                    .addComponent(txtFId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblWins)
+                    .addComponent(jSpinWins, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(pnlAddUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblName)
+                    .addComponent(txtFName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDuration)
+                    .addComponent(jSpinDuration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlAddUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblAge)
+                    .addComponent(JSpinAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTransferFee)
+                    .addComponent(jSpinTransferFee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addGroup(pnlAddUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblExperience, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinExperience, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClear))
+                .addGroup(pnlAddUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlAddUpdateLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlAddUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblTeam)
+                            .addComponent(txtFTeam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(pnlAddUpdateLayout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(pnlAddUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnUpdate)
+                            .addComponent(btnAdd))))
+                .addContainerGap(280, Short.MAX_VALUE))
+        );
+
+        tbMain.addTab("Add/Update", pnlAddUpdate);
+
+        pnlAboutUs.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblAboutUsTitle.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblAboutUsTitle.setText("OUR STORY");
+        pnlAboutUs.add(lblAboutUsTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 20, -1, -1));
+
+        txtFDescription.setEditable(false);
+        txtFDescription.setColumns(20);
+        txtFDescription.setRows(5);
+        txtFDescription.setText("PitStop Manager is your go-to platform for managing Formula 1 \ndriver transfers and contracts. Designed to simplify complex \nprocesses, it centralizes driver details, transfer histories, and \nmarket insights, empowering teams to make data-driven \ndecisions with ease.  \n\nWith features like real-time market value tracking, contract validation, \nand historical analysis, PitStop Manager streamlines operations while \nsupporting regulatory compliance. \n\nWe are committed to delivering efficiency, accuracy, and \ninnovation, helping F1 teams stay ahead in the race on and off the \ntrack.");
+        txtFDescription.setAutoscrolls(false);
+        jSPanOurStory.setViewportView(txtFDescription);
+
+        pnlAboutUs.add(jSPanOurStory, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 50, 380, 230));
+
+        lblContactUS.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblContactUS.setText("CONTACT US");
+        pnlAboutUs.add(lblContactUS, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 300, -1, -1));
+
+        lblEmail.setText("Please enter your email:");
+        pnlAboutUs.add(lblEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 330, -1, -1));
+
+        txtFUserEmail.setBackground(new java.awt.Color(255, 204, 204));
+        txtFUserEmail.setText("\n");
+        pnlAboutUs.add(txtFUserEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 350, 270, -1));
+
+        btnContact.setBackground(new java.awt.Color(0, 0, 0));
+        btnContact.setForeground(new java.awt.Color(255, 255, 255));
+        btnContact.setText("Enter");
+        btnContact.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnContactActionPerformed(evt);
+            }
+        });
+        pnlAboutUs.add(btnContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 350, -1, -1));
+
+        lblAboutUsBg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pitstopmanager/resources/about_us_bg.png"))); // NOI18N
+        pnlAboutUs.add(lblAboutUsBg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 810, 430));
+
+        tbMain.addTab("About US", pnlAboutUs);
+
+        javax.swing.GroupLayout pnlMainScreenLayout = new javax.swing.GroupLayout(pnlMainScreen);
+        pnlMainScreen.setLayout(pnlMainScreenLayout);
+        pnlMainScreenLayout.setHorizontalGroup(
+            pnlMainScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMainScreenLayout.createSequentialGroup()
+                .addComponent(tbMain, javax.swing.GroupLayout.PREFERRED_SIZE, 817, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(pnlMainScreenLayout.createSequentialGroup()
+                .addComponent(pnlMainBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        pnlMainScreenLayout.setVerticalGroup(
+            pnlMainScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMainScreenLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnlMainBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tbMain, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        tbMain.getAccessibleContext().setAccessibleName("Home");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAlwaysOnTop(true);
+        setResizable(false);
+        setSize(new java.awt.Dimension(800, 600));
+
+        pnlLoadingScreen.setBackground(new java.awt.Color(255, 255, 255));
+        pnlLoadingScreen.setPreferredSize(new java.awt.Dimension(800, 600));
+
+        lblLoadingLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/pitstopmanager/resources/logo_big.png"))); // NOI18N
+
+        pgBarSplashScreen.setBackground(new java.awt.Color(220, 0, 0));
+        pgBarSplashScreen.setForeground(new java.awt.Color(220, 0, 0));
+
+        lblLoading.setText("Loading ....");
+
+        lblProgress.setForeground(new java.awt.Color(220, 0, 0));
+        lblProgress.setText("0 %");
+
+        javax.swing.GroupLayout pnlLoadingScreenLayout = new javax.swing.GroupLayout(pnlLoadingScreen);
+        pnlLoadingScreen.setLayout(pnlLoadingScreenLayout);
+        pnlLoadingScreenLayout.setHorizontalGroup(
+            pnlLoadingScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlLoadingScreenLayout.createSequentialGroup()
+                .addGap(261, 261, 261)
+                .addGroup(pnlLoadingScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(pnlLoadingScreenLayout.createSequentialGroup()
+                        .addComponent(lblLoading)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblProgress))
+                    .addGroup(pnlLoadingScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(pgBarSplashScreen, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblLoadingLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(280, Short.MAX_VALUE))
+        );
+        pnlLoadingScreenLayout.setVerticalGroup(
+            pnlLoadingScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlLoadingScreenLayout.createSequentialGroup()
+                .addGap(96, 96, 96)
+                .addComponent(lblLoadingLogo)
+                .addGap(13, 13, 13)
+                .addGroup(pnlLoadingScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblLoading)
+                    .addComponent(lblProgress))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pgBarSplashScreen, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(212, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlLoadingScreen, javax.swing.GroupLayout.DEFAULT_SIZE, 810, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlLoadingScreen, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
+        );
+
+        setSize(new java.awt.Dimension(826, 619));
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void txtFldLoginUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldLoginUsernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFldLoginUsernameActionPerformed
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        // Get the username and password input
+        String username = txtFldLoginUsername.getText();
+        String password = new String(pwdFldLogin.getPassword());
+
+        // Check if username or password is empty
+        if (username.isEmpty() || password.isEmpty()) {
+            lblLoginError.setText("Please enter your username and password.");
+        } // Check if username and password are incorrect
+        else if (!username.equals("admin") || !password.equals("admin")) {
+            lblLoginError.setText("Username and password mismatch.");
+        } // If credentials are correct, proceed to load the main screen
+        else {
+            lblLoginError.setText("    "); // Clear any previous error messages
+            loadScreen("MainScreen"); // Load the main screen
+        }
+        
+        // Clear input fields
+        txtFId.setText("");
+        txtFName.setText("");
+        txtFTeam.setText("");
+        JSpinAge.setValue(18); // Reset JSpinner to default value
+        jSpinExperience.setValue(0); // Reset JSpinner to default value
+        jSpinWins.setValue(0); // Reset JSpinner to default value
+        jSpinDuration.setValue(1); // Reset JSpinner to default value
+        jSpinTransferFee.setValue(0.5); // Reset JSpinner to default value
+        
+        
+    }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void pwdFldLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwdFldLoginActionPerformed
+        
+    }//GEN-LAST:event_pwdFldLoginActionPerformed
+
+    private void txtFNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFNameActionPerformed
+
+    private void txtFIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFIdActionPerformed
+
+    private void txtFTeamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFTeamActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFTeamActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        try {
+            // Retrieve input data from UI fields
+            String driverIdText = txtFId.getText().trim();
+            String name = txtFName.getText().trim();
+            String ageText = JSpinAge.getValue().toString();
+            String experienceText = jSpinExperience.getValue().toString();
+            String team = txtFTeam.getText().trim().toLowerCase();
+            String winsText = jSpinWins.getValue().toString();
+            String contractDurationText = jSpinDuration.getValue().toString();
+            String transferFeeText = jSpinTransferFee.getValue().toString();
+
+            // Check if any field is empty
+            if (ValidationUtil.isNullOrEmpty(driverIdText) || ValidationUtil.isNullOrEmpty(name) ||
+                ValidationUtil.isNullOrEmpty(ageText) || ValidationUtil.isNullOrEmpty(experienceText) ||
+                ValidationUtil.isNullOrEmpty(team) || ValidationUtil.isNullOrEmpty(winsText) ||
+                ValidationUtil.isNullOrEmpty(contractDurationText) || ValidationUtil.isNullOrEmpty(transferFeeText)) {
+                JOptionPane.showMessageDialog(this, "All fields are required. Please fill out every field.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Parse input data
+            int driverId = Integer.parseInt(driverIdText);
+            int age = Integer.parseInt(ageText);
+            int experience = Integer.parseInt(experienceText);
+            int wins = Integer.parseInt(winsText);
+            int contractDuration = Integer.parseInt(contractDurationText);
+            double transferFee = Double.parseDouble(transferFeeText);
+
+
+
+            // Declare and initialize the existingTeams array with Formula 1 team names
+            List<String> existingTeams = List.of(
+                "mercedes", 
+                "ferrari", 
+                "red bull racing", 
+                "mclaren", 
+                "alpine", 
+                "aston martin", 
+                "alfa romeo", 
+                "haas", 
+                "alphatauri", 
+                "williams"
+            );
+            
+            // Check if the driver ID already exists in the list
+            DriverModel existingDriver = driverList.stream()
+                .filter(driver -> driver.getDriverId() == driverId)
+                .findFirst()
+                .orElse(null);
+
+            if (existingDriver != null) {
+                JOptionPane.showMessageDialog(this, "Driver ID " + driverId + " already exists. Please use a different ID.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Create a new DriverModel object
+            DriverModel driver = new DriverModel(driverId, name, age, experience, team, wins, contractDuration, transferFee);
+            
+            // Check if the team name is valid (must be an exact match with one of the existing teams)
+            if (!existingTeams.contains(team)) {
+                StringBuilder errorMessage = new StringBuilder();
+                errorMessage.append("Invalid team name. Team must be one of the following:\n\n");
+                for (String validTeam : existingTeams) {
+                    errorMessage.append("• ").append(validTeam).append("\n");
+                }
+                JOptionPane.showMessageDialog(this, errorMessage.toString(), "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Validate driver attributes using ValidationUtil
+            if (!ValidationUtil.isValidId(driverId)) {
+                JOptionPane.showMessageDialog(this, "Invalid driver ID. Only Numeric input allowed (0-100).", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!ValidationUtil.isValidName(name)) {
+                JOptionPane.showMessageDialog(this, "Invalid name. Only alphabets and spaces are allowed.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!ValidationUtil.isValidAge(age)) {
+                JOptionPane.showMessageDialog(this, "Invalid age. Age must be between 18 and 70.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!ValidationUtil.isValidExperience(experience)) {
+                JOptionPane.showMessageDialog(this, "Invalid experience. Experience cannot be negative.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!ValidationUtil.isValidTeam(team, existingTeams)) {
+                JOptionPane.showMessageDialog(this, "Invalid team name. It must be alphanumeric and not already exist.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!ValidationUtil.isValidWins(wins)) {
+                JOptionPane.showMessageDialog(this, "Invalid number of wins. Wins cannot be negative.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!ValidationUtil.isValidContractDuration(contractDuration)) {
+                JOptionPane.showMessageDialog(this, "Invalid contract duration. It must be between 1 and 10 years.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!ValidationUtil.isValidTransferFee(transferFee)) {
+                JOptionPane.showMessageDialog(this, "Invalid transfer fee. It must be between 0.5 and 200 million.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Add the validated driver
+            registerDriver(driver);
+
+            // Clear input fields after successful addition
+            txtFId.setText("");
+            txtFName.setText("");
+            txtFTeam.setText("");
+            JSpinAge.setValue(18); // Reset JSpinner to default value
+            jSpinExperience.setValue(0); // Reset JSpinner to default value
+            jSpinWins.setValue(0); // Reset JSpinner to default value
+            jSpinDuration.setValue(1); // Reset JSpinner to default value
+            jSpinTransferFee.setValue(0.5); // Reset JSpinner to default value
+
+            // Display success message
+            JOptionPane.showMessageDialog(this, "Driver added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid driver ID. Only Numeric input allowed (0-100).", "Input Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void jtxtFDeleteIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtFDeleteIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtxtFDeleteIdActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        pwdFldLogin.setText("");
+        txtFldLoginUsername.setText("");
+        loadScreen("LoginScreen"); 
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnBackHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackHomeActionPerformed
+        tbMain.setSelectedComponent(pnlHome);
+    }//GEN-LAST:event_btnBackHomeActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+                    
+        // Retrieve the driver ID from the text field
+        String inputId = jtxtFDeleteId.getText().trim();
+
+        // Validate input
+        if (ValidationUtil.isNullOrEmpty(inputId)) {
+            JOptionPane.showMessageDialog(this, "Driver ID cannot be empty.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int driverId;
+        try {
+            driverId = Integer.parseInt(inputId);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid Driver ID. Please enter a valid number.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!ValidationUtil.isValidId(driverId)) {
+            JOptionPane.showMessageDialog(this, "Invalid Driver ID. ID must be positive.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Check if the driver exists in the list
+        DriverModel driverToDelete = driverList.stream()
+            .filter(driver -> driver.getDriverId() == driverId)
+            .findFirst()
+            .orElse(null);
+
+        if (driverToDelete == null) {
+            JOptionPane.showMessageDialog(this, "Driver with ID " + driverId + " does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Confirm deletion with the user
+        int confirmation = JOptionPane.showConfirmDialog(this, 
+            "Are you sure you want to delete the driver with ID: " + driverId + "?", 
+            "Delete Confirmation", 
+            JOptionPane.YES_NO_OPTION);
+
+        if (confirmation != JOptionPane.YES_OPTION) {
+            // User canceled deletion
+            return;
+        }
+
+        // Remove the driver from the list
+        driverList.remove(driverToDelete);
+
+        // Update the table to reflect the changes
+        loadListToTable(driverList);
+
+        // Clear the delete ID field
+        jtxtFDeleteId.setText("");
+
+        // Show success message
+        JOptionPane.showMessageDialog(this, "Driver deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        try {
+            // Retrieve input data from UI fields
+            String driverIdText = txtFId.getText().trim();
+            String name = txtFName.getText().trim();
+            String ageText = JSpinAge.getValue().toString();
+            String experienceText = jSpinExperience.getValue().toString();
+            String team = txtFTeam.getText().trim().toLowerCase();
+            String winsText = jSpinWins.getValue().toString();
+            String contractDurationText = jSpinDuration.getValue().toString();
+            String transferFeeText = jSpinTransferFee.getValue().toString();
+
+            // Check if any field is empty
+            if (ValidationUtil.isNullOrEmpty(driverIdText) || ValidationUtil.isNullOrEmpty(name) ||
+                ValidationUtil.isNullOrEmpty(ageText) || ValidationUtil.isNullOrEmpty(experienceText) ||
+                ValidationUtil.isNullOrEmpty(team) || ValidationUtil.isNullOrEmpty(winsText) ||
+                ValidationUtil.isNullOrEmpty(contractDurationText) || ValidationUtil.isNullOrEmpty(transferFeeText)) {
+                JOptionPane.showMessageDialog(this, "All fields are required. Please fill out every field.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Parse input data
+            int driverId = Integer.parseInt(driverIdText);
+            int age = Integer.parseInt(ageText);
+            int experience = Integer.parseInt(experienceText);
+            int wins = Integer.parseInt(winsText);
+            int contractDuration = Integer.parseInt(contractDurationText);
+            double transferFee = Double.parseDouble(transferFeeText);
+
+            // Declare and initialize the existingTeams array with Formula 1 team names
+            List<String> existingTeams = List.of(
+                "mercedes", 
+                "ferrari", 
+                "red bull racing", 
+                "mclaren", 
+                "alpine", 
+                "aston martin", 
+                "alfa romeo", 
+                "haas", 
+                "alphatauri", 
+                "williams"
+            );
+
+            // Check if the team name is valid (must be an exact match with one of the existing teams)
+            if (!existingTeams.contains(team)) {
+                StringBuilder errorMessage = new StringBuilder();
+                errorMessage.append("Invalid team name. Team must be one of the following:\n\n");
+                for (String validTeam : existingTeams) {
+                    errorMessage.append("• ").append(validTeam).append("\n");
+                }
+                JOptionPane.showMessageDialog(this, errorMessage.toString(), "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Create a new DriverModel object with updated data
+            DriverModel updatedDriver = new DriverModel(driverId, name, age, experience, team, wins, contractDuration, transferFee);
+
+            // Validate driver attributes using ValidationUtil
+            if (!ValidationUtil.isValidId(driverId)) {
+                JOptionPane.showMessageDialog(this, "Invalid driver ID.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!ValidationUtil.isValidName(name)) {
+                JOptionPane.showMessageDialog(this, "Invalid name. Only alphabets and spaces are allowed.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!ValidationUtil.isValidAge(age)) {
+                JOptionPane.showMessageDialog(this, "Invalid age. Age must be between 18 and 70.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!ValidationUtil.isValidExperience(experience)) {
+                JOptionPane.showMessageDialog(this, "Invalid experience. Experience cannot be negative.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!ValidationUtil.isValidWins(wins)) {
+                JOptionPane.showMessageDialog(this, "Invalid number of wins. Wins cannot be negative.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!ValidationUtil.isValidContractDuration(contractDuration)) {
+                JOptionPane.showMessageDialog(this, "Invalid contract duration. It must be between 1 and 10 years.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!ValidationUtil.isValidTransferFee(transferFee)) {
+                JOptionPane.showMessageDialog(this, "Invalid transfer fee. It must be between 0.5 and 200 million.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Find the driver to update in the list
+            int driverIndex = -1;
+            for (int i = 0; i < driverList.size(); i++) {
+                if (driverList.get(i).getDriverId() == driverId) {
+                    driverIndex = i;
+                    break;
+                }
+            }
+
+            if (driverIndex == -1) {
+                JOptionPane.showMessageDialog(this, "Driver with ID " + driverId + " not found.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Confirm update with the user
+            int confirmation = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to update the driver with ID: " + driverId + "?",
+                "Update Confirmation",
+                JOptionPane.YES_NO_OPTION);
+
+            if (confirmation != JOptionPane.YES_OPTION) {
+                // User canceled update
+                return;
+            }
+
+            // Update the driver in the list
+            driverList.set(driverIndex, updatedDriver);
+
+            // Refresh the table
+            loadListToTable(driverList);
+
+            // Clear input fields after successful update
+            txtFId.setText("");
+            txtFName.setText("");
+            txtFTeam.setText("");
+            JSpinAge.setValue(18); // Reset JSpinner to default value
+            jSpinExperience.setValue(0); // Reset JSpinner to default value
+            jSpinWins.setValue(0); // Reset JSpinner to default value
+            jSpinDuration.setValue(1); // Reset JSpinner to default value
+            jSpinTransferFee.setValue(0.5); // Reset JSpinner to default value
+            txtFId.setEditable(true);
+            // Display success message
+            JOptionPane.showMessageDialog(this, "Driver updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid input. Please check your entries.", "Input Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "An unexpected error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void spnltableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_spnltableMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_spnltableMouseClicked
+
+    private void tblDriverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDriverMouseClicked
+                                      
+        // Check for a double-click event
+        if (evt.getClickCount() == 2) {
+            int selectedRow = tblDriver.getSelectedRow(); // Get the selected row index
+
+            // Check if a valid row is selected
+            if (selectedRow != -1) {
+                // User chose to update the row
+                DriverModel selectedDriver = driverList.get(selectedRow);
+
+                // Populate the fields with the selected driver's data
+                txtFId.setText(String.valueOf(selectedDriver.getDriverId()));
+                txtFId.setEditable(false); 
+                txtFName.setText(selectedDriver.getName());
+                JSpinAge.setValue(selectedDriver.getAge());
+                jSpinExperience.setValue(selectedDriver.getExperience());
+                txtFTeam.setText(selectedDriver.getTeam());
+                jSpinWins.setValue(selectedDriver.getWins());
+                jSpinDuration.setValue(selectedDriver.getContractDuration());
+                jSpinTransferFee.setValue(selectedDriver.getTransferFee());
+
+                tbMain.setSelectedComponent(pnlAddUpdate);
+                JOptionPane.showMessageDialog(this, "Driver data loaded for update. Modify fields and click 'Update'.", "Info", JOptionPane.INFORMATION_MESSAGE);
+
+            } else {
+                JOptionPane.showMessageDialog(this, "No row selected. Please double-click on a valid row.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_tblDriverMouseClicked
+
+    private void btnHomeViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeViewActionPerformed
+        tbMain.setSelectedComponent(pnlView);
+    }//GEN-LAST:event_btnHomeViewActionPerformed
+
+    private void btnHomeAddUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeAddUpdateActionPerformed
+        tbMain.setSelectedComponent(pnlAddUpdate);
+    }//GEN-LAST:event_btnHomeAddUpdateActionPerformed
+
+    private void btnSortIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSortIDActionPerformed
+        // Check if the driverList is not empty
+        if (driverList.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No drivers available to sort.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Convert driverList to an array for sorting
+        DriverModel[] driverArray = new DriverModel[driverList.size()];
+        driverArray = driverList.toArray(driverArray);  // Correctly convert to DriverModel array
+
+        // Prompt the user for sorting order
+        int result_sort = JOptionPane.showOptionDialog(
+                this, 
+                "How do you want the Driver IDs to be sorted?", 
+                "Sort", 
+                JOptionPane.DEFAULT_OPTION, 
+                JOptionPane.QUESTION_MESSAGE, 
+                null, 
+                new String[]{"Descending", "Ascending"}, 
+                null
+        );
+
+        // Perform sorting based on the user's choice
+        switch (result_sort) {
+            case 0: // Descending
+                SelectionSortByDriverID.selectionSortDesc(driverArray);
+                break;
+            case 1: // Ascending
+                SelectionSortByDriverID.selectionSortAsc(driverArray);
+                break;
+            default:
+                // User canceled the dialog
+                return;
+        }
+
+        // Convert the sorted array back to an ArrayList and update the table
+        driverList.clear(); // Clear the original list
+        driverList.addAll(Arrays.asList(driverArray)); // Convert array to ArrayList
+
+        loadListToTable(driverList);  // Assuming this method exists to update the table with new driverList
+
+        // Notify the user about the sorting
+        JOptionPane.showMessageDialog(this, "Drivers sorted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+    }//GEN-LAST:event_btnSortIDActionPerformed
+
+    private void btnSortNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSortNameActionPerformed
+        // TODO add your handling code here:
+
+        // Convert driverList to an array
+        DriverModel[] driverArray = driverList.toArray(new DriverModel[0]);
+
+        // Prompt user for sorting order
+        int resultSortName = JOptionPane.showOptionDialog(
+            this,
+            "How would you like to sort the drivers by name?",
+            "Sort By Name",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            new String[]{"Ascending (A-Z)", "Descending (Z-A)"},
+            null
+        );
+
+        // Perform the sorting based on user's choice
+        switch (resultSortName) {
+            case 0:
+                InsertionSortByDriverName.insertionSortAsc(driverArray);
+                break;
+            case 1:
+                InsertionSortByDriverName.insertionSortDesc(driverArray);
+                break;
+            default:
+                JOptionPane.showMessageDialog(this, "No sorting performed.", "Sort Cancelled", JOptionPane.INFORMATION_MESSAGE);
+                return;
+        }
+
+        // Convert the sorted array back to an ArrayList and update the table
+        driverList.clear(); // Clear the original list
+        driverList.addAll(Arrays.asList(driverArray)); // Convert array to ArrayList
+
+        loadListToTable(driverList);  // Assuming this method exists to update the table with new driverList
+
+        // Notify the user about the sorting
+        JOptionPane.showMessageDialog(this, "Drivers sorted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnSortNameActionPerformed
+
+    private void btnSortPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSortPriceActionPerformed
+        // Check if the list is empty
+        if (driverList.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No drivers available to sort.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Convert driverList to an array for sorting
+        DriverModel[] driverArray = driverList.toArray(new DriverModel[0]);
+
+        // Prompt user to choose sorting order
+        int result = JOptionPane.showOptionDialog(
+            this,
+            "How do you want to sort the transfer fees?",
+            "Sort Transfer Fees",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            new String[]{"Ascending", "Descending"},
+            "Ascending"
+        );
+
+        // Perform sorting based on user choice
+        switch (result) {
+            case 0: // Ascending
+                MergeSortByTransferPrice.mergeSortAsc(driverArray, 0, driverArray.length - 1);
+                break;
+            case 1: // Descending
+                MergeSortByTransferPrice.mergeSortDesc(driverArray, 0, driverArray.length - 1);
+                break;
+            default:
+                // User closed the dialog or clicked cancel
+                return;
+        }
+
+        // Convert the sorted array back to an ArrayList and update the table
+        driverList.clear(); // Clear the original list
+        driverList.addAll(Arrays.asList(driverArray)); // Convert array to ArrayList
+
+        loadListToTable(driverList); // Update the table with the new sorted list
+
+        // Notify user
+        JOptionPane.showMessageDialog(this, "Drivers sorted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnSortPriceActionPerformed
+
+    private void btnCancelSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelSearchActionPerformed
+        // Clear the search text field
+        jtxtFSearch.setText("");
+
+        // Reload the table with the full driver list
+        loadListToTable(driverList);
+    }//GEN-LAST:event_btnCancelSearchActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // Get the name from the text field, trimmed and converted to lowercase
+        String searchName = jtxtFSearch.getText().trim().toLowerCase();
+
+        // Validation: Check if the input is empty
+        if (searchName.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a name to search.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Validation: Check if the input contains any numeric characters or special characters
+        if (searchName.matches(".*\\d.*")) {  // Checks for any digit
+            JOptionPane.showMessageDialog(this, "Search name cannot contain numbers.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!searchName.matches("[a-zA-Z\\s]*")) {  // Checks for invalid characters (only letters and spaces allowed)
+            JOptionPane.showMessageDialog(this, "Search name contains invalid characters. Only letters and spaces are allowed.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Validation: Ensure the driver list is not empty
+        if (driverList.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No drivers available for searching.", "Data Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Convert the List to an array and sort it by name
+        DriverModel[] driverArray = driverList.toArray(DriverModel[]::new); // Correct way to convert List to array
+        Arrays.sort(driverArray, (d1, d2) -> d1.getName().toLowerCase().compareTo(d2.getName().toLowerCase())); // Sort by name (case-insensitive)
+
+        // Perform binary search
+        int searchIndex = BinarySearchByName.binarySearchByName(driverArray, searchName);
+
+        if (searchIndex != -1) {
+            // Match found: Update the table with the search result
+            DriverModel foundDriver = driverArray[searchIndex];
+            List<DriverModel> resultList = List.of(foundDriver); // Create a singleton list with the found driver
+
+            loadListToTable(resultList); // Update the table with the result
+        } else {
+            // Match not found: Show a message
+            JOptionPane.showMessageDialog(this, "Driver with the name \"" + searchName + "\" not found.", "Search Result", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void jtxtFSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtFSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtxtFSearchActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        // Clear input fields after successful update
+        txtFId.setEditable(true);
+        txtFId.setText("");
+        txtFName.setText("");
+        txtFTeam.setText("");
+        JSpinAge.setValue(18); // Reset JSpinner to default value
+        jSpinExperience.setValue(0); // Reset JSpinner to default value
+        jSpinWins.setValue(0); // Reset JSpinner to default value
+        jSpinDuration.setValue(1); // Reset JSpinner to default value
+        jSpinTransferFee.setValue(0.5); // Reset JSpinner to default value
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnContactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContactActionPerformed
+        // Retrieve text from the email field
+        String userEmail = txtFUserEmail.getText().trim();
+
+        // Check if the field is empty
+        if (userEmail.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this, 
+                "Please enter your email address.", 
+                "Validation Error", 
+                javax.swing.JOptionPane.WARNING_MESSAGE
+            );
+        } else if (!userEmail.matches("^[\\w.-]+@gmail\\.com$")) { 
+            // Validate email format for Gmail
+            javax.swing.JOptionPane.showMessageDialog(
+                this, 
+                "Enter email in the format: ...@gmail.com", 
+                "Invalid Email", 
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        } else {
+            // Display confirmation message for valid email
+            javax.swing.JOptionPane.showMessageDialog(
+                this, 
+                "Thanks for contacting us. We will reach out to you soon!", 
+                "Contact Confirmation", 
+                javax.swing.JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+
+        // Clear the email field at the end
+        txtFUserEmail.setText("");
+    }//GEN-LAST:event_btnContactActionPerformed
+    
+    /**
+     * Populates the JTable with the current list of student records. Clears
+     * existing rows in the table model before adding new data.
+     */
+    private void loadListToTable(List<DriverModel> studentList) {
+        DefaultTableModel model = (DefaultTableModel) tblDriver.getModel();
+
+        // Clear existing rows if needed
+        model.setRowCount(0);
+
+        // Populate the table with student data
+        studentList.forEach(driver -> model.addRow(new Object[]{
+            driver.getDriverId(),
+            driver.getName(),
+            driver.getAge(),
+            driver.getExperience(),
+            driver.getTeam(),
+            driver.getWins(),
+            driver.getContractDuration(),
+            driver.getTransferFee()            
+        }));
+    }
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(PitStopManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(PitStopManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(PitStopManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(PitStopManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        PitStopManager app = new PitStopManager();
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> {
+            app.setVisible(true);
+        });
+
+        app.startProgress();
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JSpinner JSpinAge;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnBackHome;
+    private javax.swing.JButton btnCancelSearch;
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnContact;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnHomeAddUpdate;
+    private javax.swing.JButton btnHomeView;
+    private javax.swing.JButton btnLogin;
+    private javax.swing.JButton btnLogout;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnSortID;
+    private javax.swing.JButton btnSortName;
+    private javax.swing.JButton btnSortPrice;
+    private javax.swing.JButton btnUpdate;
+    private javax.swing.JScrollPane jSPanOurStory;
+    private javax.swing.JSpinner jSpinDuration;
+    private javax.swing.JSpinner jSpinExperience;
+    private javax.swing.JSpinner jSpinTransferFee;
+    private javax.swing.JSpinner jSpinWins;
+    private javax.swing.JTextField jtxtFDeleteId;
+    private javax.swing.JTextField jtxtFSearch;
+    private javax.swing.JLabel lblAboutUsBg;
+    private javax.swing.JLabel lblAboutUsTitle;
+    private javax.swing.JLabel lblAddPageTitle;
+    private javax.swing.JLabel lblAge;
+    private javax.swing.JLabel lblContactUS;
+    private javax.swing.JLabel lblDeleteDriver;
+    private javax.swing.JLabel lblDuration;
+    private javax.swing.JLabel lblEmail;
+    private javax.swing.JLabel lblExperience;
+    private javax.swing.JLabel lblF1icon;
+    private javax.swing.JLabel lblFNameSearch;
+    private javax.swing.JLabel lblHomeHeading;
+    private javax.swing.JLabel lblHomeStatement1;
+    private javax.swing.JLabel lblHomeStatement2;
+    private javax.swing.JLabel lblHomeStatement3;
+    private javax.swing.JLabel lblHomeStatement4;
+    private javax.swing.JLabel lblHomeStatement5;
+    private javax.swing.JLabel lblHomeSubTitle;
+    private javax.swing.JLabel lblId;
+    private javax.swing.JLabel lblLoading;
+    private javax.swing.JLabel lblLoadingLogo;
+    private javax.swing.JLabel lblLoginError;
+    private javax.swing.JLabel lblLoginForgotPwd;
+    private javax.swing.JLabel lblLoginRight;
+    private javax.swing.JLabel lblLoginSubTitle;
+    private javax.swing.JLabel lblLoginTitle;
+    private javax.swing.JLabel lblMainBarLogo;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblPassword;
+    private javax.swing.JLabel lblProgress;
+    private javax.swing.JLabel lblTeam;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblTransferFee;
+    private javax.swing.JLabel lblUsername;
+    private javax.swing.JLabel lblWins;
+    private javax.swing.JProgressBar pgBarSplashScreen;
+    private javax.swing.JPanel pnlAboutUs;
+    private javax.swing.JPanel pnlAddUpdate;
+    private javax.swing.JPanel pnlHome;
+    private javax.swing.JPanel pnlLoadingScreen;
+    private javax.swing.JPanel pnlLoginScreen;
+    private javax.swing.JPanel pnlMainBar;
+    private javax.swing.JPanel pnlMainScreen;
+    private javax.swing.JPanel pnlView;
+    private javax.swing.JPasswordField pwdFldLogin;
+    private javax.swing.JScrollPane spnltable;
+    private javax.swing.JTabbedPane tbMain;
+    private javax.swing.JTable tblDriver;
+    private javax.swing.JTextArea txtFDescription;
+    private javax.swing.JTextField txtFId;
+    private javax.swing.JTextField txtFName;
+    private javax.swing.JTextField txtFTeam;
+    private javax.swing.JTextField txtFUserEmail;
+    private javax.swing.JTextField txtFldLoginUsername;
+    // End of variables declaration//GEN-END:variables
+}
