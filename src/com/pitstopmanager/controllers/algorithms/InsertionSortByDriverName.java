@@ -12,7 +12,7 @@ import com.pitstopmanager.model.DriverModel;
  * This class provides methods to sort an array of DriverModel objects
  * in ascending or descending order based on the driver's name.
  *
- * @author satyam
+ * @author 23048597 Satyam Dulal
  */
 public class InsertionSortByDriverName {
 

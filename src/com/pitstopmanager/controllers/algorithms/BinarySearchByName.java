@@ -11,7 +11,7 @@ import com.pitstopmanager.model.DriverModel;
  *
  * Ensure that the array is sorted by the driver's name before calling this method.
  * 
- * @author satyam
+ * @author 23048597 Satyam Dulal
  */
 public class BinarySearchByName {
 

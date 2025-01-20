@@ -17,7 +17,7 @@ import com.pitstopmanager.controllers.algorithms.MergeSortByTransferPrice;
 import com.pitstopmanager.controllers.algorithms.BinarySearchByName;
 /**
  *
- * @author satyam
+ * @author 23048597 Satyam Dulal
  */
 public class PitStopManager extends javax.swing.JFrame {
     

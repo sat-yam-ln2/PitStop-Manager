@@ -15,7 +15,7 @@ import com.pitstopmanager.model.DriverModel;
  * - mergeSortDesc: Sorts the array in descending order based on the transfer fee.
  * - merge: Merges two sorted subarrays into one.
  * 
- * @author satyam dulal
+ * @author 23048597 Satyam Dulal
  */
 public class MergeSortByTransferPrice {
 

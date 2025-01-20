@@ -14,7 +14,7 @@ import com.pitstopmanager.model.DriverModel;
  * - selectionSortAsc: Sorts the array in ascending order based on the driver ID.
  * - selectionSortDesc: Sorts the array in descending order based on the driver ID.
  * 
- * @author satyam
+ * @author 23048597 Satyam Dulal
  */
 public class SelectionSortByDriverID {
 

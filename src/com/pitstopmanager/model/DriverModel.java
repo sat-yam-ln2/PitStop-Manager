@@ -17,7 +17,7 @@ package com.pitstopmanager.model;
  * - contractDuration: Duration of the driver's contract in years.
  * - transferFee: Transfer fee associated with the driver.
  * 
- * @author satyam
+ * @author 23048597 Satyam Dulal
  */
 public class DriverModel {
 
